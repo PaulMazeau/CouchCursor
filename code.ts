@@ -1,4 +1,4 @@
-figma.showUI(__html__, { width: 400, height: 300 });
+figma.showUI(__html__, { width: 450, height: 300 });
 
 figma.ui.onmessage = async msg => {
   if (msg.type === 'create-couch-cursor' && msg.imageUrl) {
