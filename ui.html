@@ -19,59 +19,39 @@
             height: 100px;
             border-radius: 8px;
             margin: 5px;
-            cursor: pointer;
+            cursor: grab; /* Cursor style when hovering over the image */
         }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
+        .image:active {
+            cursor: grabbing; /* Cursor style when dragging the image */
         }
-        #createButton{
-          background-color: black;
-          border-radius: 4px;
-          border: none;
-          color: white;
+        .dragging {
+            opacity: 0.5; /* Style when the image is being dragged */
         }
     </style>
 </head>
 <body>
-    <h3>Choose a couch</h3>
+    <h3>Drag & drop the couch</h3>
     <div class="container">
         <div>
-            <img src="https://i.ibb.co/Js1vw0d/couch1.png" class="image" onclick="selectImage(this.src, event)">
-            <img src="https://i.postimg.cc/CL3rsLKp/couch1.png" class="image" onclick="selectImage(this.src, event)">
-            <img src="https://i.postimg.cc/4xw3z4C4/couch10.png" class="image" onclick="selectImage(this.src, event)">
-            <img src="https://i.postimg.cc/CL3rsLKp/couch1.png" class="image" onclick="selectImage(this.src, event)">
+            <img src="https://i.ibb.co/Js1vw0d/couch1.png" class="image" draggable="true">
+            <img src="https://i.postimg.cc/CL3rsLKp/couch1.png" class="image" draggable="true">
+            <img src="https://i.postimg.cc/4xw3z4C4/couch10.png" class="image" draggable="true">
+            <img src="https://i.postimg.cc/CL3rsLKp/couch1.png" class="image" draggable="true">
         </div>
-        <button id="createButton">Chill on this couch</button>
     </div>
 
     <script>
-      let selectedImageUrl = null;
-  
-      function selectImage(src, event) {
-          // Retirer la bordure rouge de toutes les images
-          const images = document.getElementsByClassName('image');
-          for (let i = 0; i < images.length; i++) {
-              images[i].style.border = 'none';
-          }
-  
-          // Mettre à jour l'URL de l'image sélectionnée
-          selectedImageUrl = src;
-  
-          // Ajouter une bordure rouge à l'image sélectionnée
-          event.currentTarget.style.border = '2px solid red';
-      }
-  
-      document.getElementById('createButton').addEventListener('click', () => {
-          if (selectedImageUrl) {
-              parent.postMessage({ pluginMessage: { type: 'create-couch-cursor', imageUrl: selectedImageUrl } }, '*');
-          } else {
-              console.log('Aucune image sélectionnée');
-          }
-      });
-  </script>
-  
+        document.querySelectorAll('.image').forEach(img => {
+            img.addEventListener('dragstart', (event) => {
+                event.dataTransfer.setData('text/plain', event.target.src);
+                img.classList.add('dragging');
+            });
+
+            img.addEventListener('dragend', () => {
+                img.classList.remove('dragging');
+                parent.postMessage({ pluginMessage: { type: 'create-couch-cursor', imageUrl: event.target.src } }, '*');
+            });
+        });
+    </script>
 </body>
 </html>

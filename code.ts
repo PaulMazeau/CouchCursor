@@ -3,7 +3,7 @@ figma.showUI(__html__, { width: 450, height: 300 });
 figma.ui.onmessage = async msg => {
   if (msg.type === 'create-couch-cursor' && msg.imageUrl) {
     try {
-      // Charger et créer l'image
+      // Logique pour créer l'image sur le canevas
       const imageUrl = msg.imageUrl;
       const response = await fetch(imageUrl);
       const imageData = await response.arrayBuffer();
@@ -11,7 +11,7 @@ figma.ui.onmessage = async msg => {
       const rect = figma.createRectangle();
       rect.resize(400, 200); // Ajustez la taille selon les besoins
       rect.fills = [{ type: 'IMAGE', scaleMode: 'FILL', imageHash }];
-      rect.x = 100;
+      rect.x = 100; // Ces valeurs pourraient être ajustées en fonction de la position de glisser-déposer
       rect.y = 100;
       figma.currentPage.appendChild(rect);
 
@@ -20,10 +20,7 @@ figma.ui.onmessage = async msg => {
       await figma.loadFontAsync({ family: "Roboto", style: "Bold" });
       textNode.fontName = { family: "Roboto", style: "Bold" };
       textNode.characters = "Cursors chill couch";
-      textNode.x = rect.x;
-      textNode.y = rect.y - 20; 
-      figma.currentPage.appendChild(textNode);
-
+      textNode.fontSize = 32;
       textNode.x = rect.x + (rect.width - textNode.width) / 2;
       textNode.y = rect.y - textNode.height - 10; // 10px au-dessus de l'image
       figma.currentPage.appendChild(textNode);
