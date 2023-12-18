@@ -9,11 +9,11 @@ figma.ui.onmessage = async msg => {
       const imageData = await response.arrayBuffer();
       const imageHash = figma.createImage(new Uint8Array(imageData)).hash;
       const rect = figma.createRectangle();
-      rect.resize(400, 200); // Ajustez la taille selon les besoins
+      rect.name = "Couch";
+      rect.resize(400, 200);
       rect.fills = [{ type: 'IMAGE', scaleMode: 'FILL', imageHash }];
-      rect.x = 100; // Ces valeurs pourraient être ajustées en fonction de la position de glisser-déposer
+      rect.x = 100;
       rect.y = 100;
-      figma.currentPage.appendChild(rect);
 
       // Créer le texte
       const textNode = figma.createText();
@@ -22,10 +22,13 @@ figma.ui.onmessage = async msg => {
       textNode.characters = "Cursors chill couch";
       textNode.fontSize = 32;
       textNode.x = rect.x + (rect.width - textNode.width) / 2;
-      textNode.y = rect.y - textNode.height - 10; // 10px au-dessus de l'image
-      figma.currentPage.appendChild(textNode);
+      textNode.y = rect.y - textNode.height - 10;
 
-      figma.viewport.scrollAndZoomIntoView([rect, textNode]);
+      // Créer un group
+      const group = figma.group([rect, textNode], figma.currentPage);
+      group.name = "Couch Cursor";
+
+      figma.viewport.scrollAndZoomIntoView([group]);
     } catch (error) {
       console.error('Erreur lors du chargement de l’image ou de la création du texte:', error);
     }
